@@ -1,17 +1,20 @@
 #!/bin/bash
+planner_directory=~/Documents/school/planner
+exec_directory=/home/god/projects/bash/planner
+
 print-rgb(){
   printf "\x1b[38;2;$2;$3;$4m$1\x1b[0m\n"
 }
-if [ ! -e ./subjects ]; then
+if [ ! -e $exec_directory/subjects ]; then
   echo "Error, \"subjects\" folder not found, please create one in this directory"
   echo "It should include the following:"
   echo "  subjects=(<subject_1> <subject_2> <subject_3> ...)"
   exit
 fi
 
-source ./subjects
+source $exec_directory/subjects
 the_date=`date '+%m-%d-%y'`
-plan_file=~/Documents/school/planner/$the_date
+plan_file=$planner_directory/$the_date
 planner_exists(){
   if [ ! -e  "$plan_file" ]; then
     echo "Planner does not exist, create one by running: planner"
