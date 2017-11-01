@@ -1,1 +1,1 @@
-A planner for your daily homework
+A planner for your daily homework 
