@@ -21,6 +21,7 @@ planner_exists(){
     exit
   fi
 }
+planner_exists
 if [ "$1" == "-h" ]; then
    echo "planner is a simple program to organize your daily homework"
    echo "Here is a list of its commands:"
@@ -32,7 +33,7 @@ if [ "$1" == "-h" ]; then
    echo "  psearch -h           |  Brings up this message"
 
 elif [ "$1" == "-l" ]; then
-  planner_exists
+
   if [ "$2" == "" ]; then
     subject=""
   else
@@ -49,7 +50,7 @@ elif [ "$1" == "-l" ]; then
   done < "$plan_file"
 
 elif [ "$1" == "-e" ]; then
-  planner_exists
+
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
@@ -63,7 +64,7 @@ elif [ "$1" == "-e" ]; then
   fi
 
 elif [ "$1" == "-E" ]; then
-  planner_exists
+
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
@@ -76,7 +77,7 @@ elif [ "$1" == "-E" ]; then
   fi
 
 elif [ "$1" == "-d" ]; then
-  planner_exists
+
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
@@ -100,7 +101,7 @@ elif [ "$1" == "-d" ]; then
   fi
 
 elif [ "$1" == "-nd" ]; then
-  planner_exists
+
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
