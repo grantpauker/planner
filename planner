@@ -1,27 +1,31 @@
 #!/bin/bash
 planner_directory=~/Documents/school/planner
 exec_directory=/home/god/projects/bash/planner
+source $exec_directory/subjects
+
+the_date=`date '+%m-%d-%y'`
+plan_file=$planner_directory/$the_date
 
 print-rgb(){
   printf "\x1b[38;2;$2;$3;$4m$1\x1b[0m\n"
 }
-if [ ! -e $exec_directory/subjects ]; then
-  echo "Error, \"subjects\" folder not found, please create one in this directory"
-  echo "It should include the following:"
-  echo "  subjects=(<subject_1> <subject_2> <subject_3> ...)"
-  exit
-fi
 
-source $exec_directory/subjects
-the_date=`date '+%m-%d-%y'`
-plan_file=$planner_directory/$the_date
 planner_exists(){
   if [ ! -e  "$plan_file" ]; then
     echo "Planner does not exist, create one by running: planner"
     exit
   fi
 }
+
+if [ ! -e $exec_directory/subjects ]; then
+  echo "Error, \"subjects\" file not found, please create one in this directory"
+  echo "It should include the following:"
+  echo "  subjects=(<subject_1> <subject_2> <subject_3> ...)"
+  exit
+fi
+
 planner_exists
+
 planner_edit(){
   if [ "$1" == "" ]; then
     echo "Please specify a subject"
@@ -39,6 +43,7 @@ planner_edit(){
     sed -i "s~.*$1:.*~$1: $input~g" $plan_file
   fi
 }
+
 if [ "$1" == "-h" ]; then
    echo "planner is a simple program to organize your daily homework"
    echo "Here is a list of its commands:"
@@ -47,11 +52,10 @@ if [ "$1" == "-h" ]; then
    echo "  psearch -e [subject] |  Edit the entry for a specifc subject"
    echo "  psearch -E [subject] |  Fully change the entry for a specifc subject"
    echo "  psearch -d [subject] |  Mark a subject as done"
-   echo "  psearch +d [subject] |  Mark a subject as not done (undo's +d)"
+   echo "  psearch +d [subject] |  Mark a subject as not done (undo's -d)"
    echo "  psearch -h           |  Brings up this message"
 
 elif [ "$1" == "-l" ]; then
-
   if [ "$2" == "" ]; then
     subject=""
   else
@@ -75,7 +79,6 @@ elif [ "$1" == "-E" ]; then
   planner_edit $2
 
 elif [ "$1" == "-d" ]; then
-
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
@@ -121,7 +124,6 @@ elif [ "$1" == "+d" ]; then
         exit
       fi
     fi
-
   fi
 
 else
