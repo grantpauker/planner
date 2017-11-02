@@ -22,6 +22,23 @@ planner_exists(){
   fi
 }
 planner_exists
+planner_edit(){
+  if [ "$1" == "" ]; then
+    echo "Please specify a subject"
+    exit
+  else
+    if [ "$2" == "" ]; then
+      current_entry="";
+    else
+      current_entry="$2"
+    fi
+    read -re -i "$current_entry" -p "Homework for $1: " input
+    if [ "$input" == "" ]; then
+      input="none"
+    fi
+    sed -i "s~.*$1:.*~$1: $input~g" $plan_file
+  fi
+}
 if [ "$1" == "-h" ]; then
    echo "planner is a simple program to organize your daily homework"
    echo "Here is a list of its commands:"
@@ -30,6 +47,7 @@ if [ "$1" == "-h" ]; then
    echo "  psearch -e [subject] |  Edit the entry for a specifc subject"
    echo "  psearch -E [subject] |  Fully change the entry for a specifc subject"
    echo "  psearch -d [subject] |  Mark a subject as done"
+   echo "  psearch +d [subject] |  Mark a subject as not done (undo's +d)"
    echo "  psearch -h           |  Brings up this message"
 
 elif [ "$1" == "-l" ]; then
@@ -50,31 +68,11 @@ elif [ "$1" == "-l" ]; then
   done < "$plan_file"
 
 elif [ "$1" == "-e" ]; then
-
-  if [ "$2" == "" ]; then
-    echo "Please specify a subject"
-    exit
-  else
-    current_entry=`cat $plan_file | grep "$2:"  | sed -r 's/.*: //g'`
-    read -re -i "$current_entry" -p "Homework for $2: " input
-    if [ "$input" == "" ]; then
-      input="none"
-    fi
-    sed -i "s~.*$2:.*~$2: $input~g" $plan_file
-  fi
+  current_entry=`cat $plan_file | grep "$2:"  | sed -r 's/.*: //g'`
+  planner_edit $2 "$current_entry"
 
 elif [ "$1" == "-E" ]; then
-
-  if [ "$2" == "" ]; then
-    echo "Please specify a subject"
-    exit
-  else
-    read -rp "Homework for $2: " input
-    if [ "$input" == "" ];then
-      input="none"
-    fi
-    sed -i "s~.*$2:.*~$2: $input~g" $plan_file
-  fi
+  planner_edit $2
 
 elif [ "$1" == "-d" ]; then
 
@@ -100,7 +98,7 @@ elif [ "$1" == "-d" ]; then
 
   fi
 
-elif [ "$1" == "-nd" ]; then
+elif [ "$1" == "+d" ]; then
 
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
