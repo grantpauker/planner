@@ -24,8 +24,6 @@ if [ ! -e $exec_directory/subjects ]; then
   exit
 fi
 
-planner_exists
-
 planner_edit(){
   if [ "$1" == "" ]; then
     echo "Please specify a subject"
@@ -56,6 +54,7 @@ if [ "$1" == "-h" ]; then
    echo "  psearch -h           |  Brings up this message"
 
 elif [ "$1" == "-l" ]; then
+  planner_exists
   if [ "$2" == "" ]; then
     subject=""
   else
@@ -72,13 +71,18 @@ elif [ "$1" == "-l" ]; then
   done < "$plan_file"
 
 elif [ "$1" == "-e" ]; then
+  planner_exists
   current_entry=`cat $plan_file | grep "$2:"  | sed -r 's/.*: //g'`
   planner_edit $2 "$current_entry"
 
 elif [ "$1" == "-E" ]; then
+  planner_exists
+
   planner_edit $2
 
 elif [ "$1" == "-d" ]; then
+  planner_exists
+
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
     exit
@@ -102,6 +106,7 @@ elif [ "$1" == "-d" ]; then
   fi
 
 elif [ "$1" == "+d" ]; then
+  planner_exists
 
   if [ "$2" == "" ]; then
     echo "Please specify a subject"
@@ -127,6 +132,7 @@ elif [ "$1" == "+d" ]; then
   fi
 
 else
+
   if [ "$1" == "" ]; then
     if [ -e  $plan_file ]; then
       read -p "Already plannerized, are you sure you want to reset (y/n): " choice
